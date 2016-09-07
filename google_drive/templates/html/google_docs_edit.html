@@ -23,6 +23,23 @@
           </div>
           <span class="tip setting-help">{% trans "This name appears in the horizontal navigation at the top of the page." %}</span>
         </li>
+
+        <li class="field comp-setting-entry is-set">
+          <div class="wrapper-comp-setting">
+            <label class="label setting-label" for="edit_display_description">{% trans "Display Description" %}</label>
+            <input class="input setting-input edit-display-name" id="edit_display_description" value="{{ self.display_description }}" type="text" data-default-value="{{display_description}}">
+          </div>
+          <span class="tip setting-help">{% trans "This description appears as the subtitle in the client app." %}</span>
+        </li>
+
+        <li class="field comp-setting-entry is-set">
+          <div class="wrapper-comp-setting">
+            <label class="label setting-label" for="edit_thumbnail_url">{% trans "Thumbnail URL" %}</label>
+            <input class="input setting-input edit-display-name" id="edit_thumbnail_url" value="{{ self.thumbnail_url }}" type="text" data-default-value="{{thumbnail_url}}">
+          </div>
+          <span class="tip setting-help">{% trans "The absolute URL to the image used as a preview of this XBlock." %}</span>
+        </li>
+
         <li class="field comp-setting-entry is-set">
           <div class="wrapper-comp-setting">
             <label class="label setting-label" for="edit_embed_code">{% trans "Embed Code" %}</label>

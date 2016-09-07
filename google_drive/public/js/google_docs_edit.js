@@ -5,6 +5,8 @@ function GoogleDocumentEditBlock(runtime, element) {
     var embed_code_textbox = $('#edit_embed_code', element);
     var xblock_inputs_wrapper = $('.xblock-inputs', element);
     var edit_display_name_input = $('#edit_display_name', element);
+    var edit_display_description_input = $('#edit_display_description', element);
+    var edit_thumbnail_url_input = $('#edit_thumbnail_url', element);
     var error_message_div = $('.xblock-editor-error-message', element);
     var defaultName = edit_display_name_input.attr('data-default-value');
     var edit_alt_text_input = $('#edit_alt_text', element);
@@ -44,6 +46,8 @@ function GoogleDocumentEditBlock(runtime, element) {
     function SaveEditing(){
         var data = {
             'display_name': edit_display_name_input.val(),
+            'display_description': edit_display_description_input.val(),
+            'thumbnail_url': edit_thumbnail_url_input.val(),
             'embed_code': embed_code_textbox.val(),
             'alt_text': edit_alt_text_input.val(),
         };
