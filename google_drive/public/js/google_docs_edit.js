@@ -5,8 +5,6 @@ function GoogleDocumentEditBlock(runtime, element) {
     var embed_code_textbox = $('#edit_embed_code', element);
     var xblock_inputs_wrapper = $('.xblock-inputs', element);
     var edit_display_name_input = $('#edit_display_name', element);
-    var edit_display_description_input = $('#edit_display_description', element);
-    var edit_thumbnail_url_input = $('#edit_thumbnail_url', element);
     var error_message_div = $('.xblock-editor-error-message', element);
     var defaultName = edit_display_name_input.attr('data-default-value');
     var edit_alt_text_input = $('#edit_alt_text', element);
@@ -15,26 +13,26 @@ function GoogleDocumentEditBlock(runtime, element) {
     ToggleClearDefaultName();
     IsUrlValid();
 
-    $('.clear-display-name', element).bind('click', function() {
+    $('.clear-display-name', element).bind('click', function () {
         $(this).addClass('inactive');
         edit_display_name_input.val(defaultName);
     });
 
-    edit_display_name_input.bind('keyup', function(){
+    edit_display_name_input.bind('keyup', function () {
         ToggleClearDefaultName();
     });
 
-    $('#edit_embed_code', element).bind('keyup', function(){
+    $('#edit_embed_code', element).bind('keyup', function () {
         IsUrlValid();
     });
 
-    $('.cancel-button', element).bind('click', function() {
+    $('.cancel-button', element).bind('click', function () {
         runtime.notify('cancel', {});
     });
 
-    function ToggleClearDefaultName(name, button){
-        if (edit_display_name_input.val() == defaultName){
-            if (!clear_name_button.hasClass('inactive')){
+    function ToggleClearDefaultName(name, button) {
+        if (edit_display_name_input.val() == defaultName) {
+            if (!clear_name_button.hasClass('inactive')) {
                 clear_name_button.addClass('inactive');
             }
         }
@@ -43,46 +41,54 @@ function GoogleDocumentEditBlock(runtime, element) {
         }
     }
 
-    function SaveEditing(){
-        var data = {
-            'display_name': edit_display_name_input.val(),
-            'display_description': edit_display_description_input.val(),
-            'thumbnail_url': edit_thumbnail_url_input.val(),
-            'embed_code': embed_code_textbox.val(),
-            'alt_text': edit_alt_text_input.val(),
-        };
+    function SaveEditing() {
+        var data = new FormData();
+        data.append('display_name', $(element).find('input[name=edit_display_name]').val());
+        data.append('display_description', $(element).find('input[name=edit_display_description]').val());
+        data.append('usage_id', $(element).data('usage-id'));
+        data.append('thumbnail', $(element).find('input[name=thumbnail]')[0].files[0]);
 
         error_message_div.html();
         error_message_div.css('display', 'none');
         var handlerUrl = runtime.handlerUrl(element, 'studio_submit');
-        $.post(handlerUrl, JSON.stringify(data)).done(function(response) {
+
+        runtime.notify('save', {state: 'start'});
+        $.ajax({
+            url: handlerUrl,
+            type: 'POST',
+            data: data,
+            cache: false,
+            dataType: 'json',
+            processData: false,
+            contentType: false
+        }).done(function (response) {
             if (response.result === 'success') {
                 window.location.reload(false);
             } else {
-                error_message_div.html('Error: '+response.message);
+                error_message_div.html('Error: ' + response.message);
                 error_message_div.css('display', 'block');
             }
         });
     }
 
-    function HideAltTextInput(){
+    function HideAltTextInput() {
         edit_alt_text_input.val('');
         alt_text_item.addClass('covered');
     }
 
-    function IsUrlValid(){
+    function IsUrlValid() {
         var embed_html = embed_code_textbox.val();
 
         var google_doc = $(embed_html);
-        embed_code_textbox.css({'cursor':'wait'});
+        embed_code_textbox.css({'cursor': 'wait'});
         save_button.addClass('disabled').unbind('click');
 
         $.ajax({
             type: "POST",
             url: runtime.handlerUrl(element, 'check_url'),
             data: JSON.stringify({url: google_doc.attr("src")}),
-            success: function(result) {
-                if (result.status_code >= 400){
+            success: function (result) {
+                if (result.status_code >= 400) {
                     validation_alert.removeClass('covered');
                     embed_code_textbox.addClass('error');
                     xblock_inputs_wrapper.addClass('alerted');
@@ -95,25 +101,25 @@ function GoogleDocumentEditBlock(runtime, element) {
 
                     save_button.bind('click', SaveEditing);
 
-                    if (embed_html.toLowerCase().indexOf("<img") >= 0){
-                        if (alt_text_item.hasClass('covered')){
+                    if (embed_html.toLowerCase().indexOf("<img") >= 0) {
+                        if (alt_text_item.hasClass('covered')) {
                             alt_text_item.removeClass('covered');
                         }
                     } else {
-                        if (!alt_text_item.hasClass('covered')){
+                        if (!alt_text_item.hasClass('covered')) {
                             HideAltTextInput();
                         }
                     }
                 }
             },
-            error: function(result) {
+            error: function (result) {
                 validation_alert.removeClass('covered');
                 save_button.addClass('disabled').unbind('click');
                 embed_code_textbox.addClass('error');
                 xblock_inputs_wrapper.addClass('alerted');
             },
-            complete: function() {
-                embed_code_textbox.css({'cursor':'auto'});
+            complete: function () {
+                embed_code_textbox.css({'cursor': 'auto'});
             }
         });
     }

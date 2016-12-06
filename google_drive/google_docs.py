@@ -14,6 +14,9 @@ from xblock.fragment import Fragment
 from xblockutils.publish_event import PublishEventMixin
 from xblockutils.resources import ResourceLoader
 
+from webob.response import Response
+from xblock_django.mixins import FileUploadMixin
+
 LOG = logging.getLogger(__name__)
 RESOURCE_LOADER = ResourceLoader(__name__)
 
@@ -32,13 +35,13 @@ DEFAULT_EMBED_CODE = textwrap.dedent("""
         mozallowfullscreen="true"
         webkitallowfullscreen="true">
     </iframe>
-""") .format(DEFAULT_DOCUMENT_URL)
+""").format(DEFAULT_DOCUMENT_URL)
 DOCUMENT_TEMPLATE = "/templates/html/google_docs.html"
 DOCUMENT_EDIT_TEMPLATE = "/templates/html/google_docs_edit.html"
 
 
 # Classes ###########################################################
-class GoogleDocumentBlock(XBlock, PublishEventMixin):  # pylint: disable=too-many-ancestors
+class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint: disable=too-many-ancestors
     """
     XBlock providing a google document embed link
     """
@@ -102,31 +105,27 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin):  # pylint: disable=too-man
         return fragment
 
     # suffix argument is specified for xblocks, but we are not using herein
-    @XBlock.json_handler
-    def studio_submit(self, submissions, suffix=''):  # pylint: disable=unused-argument
+    @XBlock.handler
+    def studio_submit(self, request, suffix=''):  # pylint: disable=unused-argument
         """
         Change the settings for this XBlock given by the Studio user
         """
-        if not isinstance(submissions, dict):
-            LOG.error("submissions object from Studio is not a dict - %r", submissions)
-            return {
-                'result': 'error'
-            }
+        data = request.POST
 
-        if 'display_name' in submissions:
-            self.display_name = submissions['display_name']
-        if 'display_description' in submissions:
-            self.display_description = submissions['display_description']
-        if 'thumbnail_url' in submissions:
-            self.thumbnail_url = submissions['thumbnail_url']
-        if 'embed_code' in submissions:
-            self.embed_code = submissions['embed_code']
-        if 'alt_text' in submissions:
-            self.alt_text = submissions['alt_text']
+        self.display_name = data['display_name']
+        self.display_description = data['display_description']
+        block_id = data['usage_id']
+        if not isinstance(data['thumbnail'], basestring):
+            upload = data['thumbnail']
+            self.thumbnail_url = self.upload_to_s3('THUMBNAIL', upload.file, block_id, self.thumbnail_url)
+        if 'embed_code' in data:
+            self.embed_code = data['embed_code']
+        if 'alt_text' in data:
+            self.alt_text = data['alt_text']
 
-        return {
-            'result': 'success',
-        }
+        return Response(json_body={
+            'result': "success"
+        })
 
     # suffix argument is specified for xblocks, but we are not using herein
     @XBlock.json_handler
