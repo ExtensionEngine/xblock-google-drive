@@ -89,7 +89,10 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin):  # pylint: disable=too-man
         # Need to access protected members of fields to get their default value
         fragment.add_content(RESOURCE_LOADER.render_template(DOCUMENT_EDIT_TEMPLATE, {
             'self': self,
-            'defaultName': self.fields['display_name']._default  # pylint: disable=protected-access
+            'defaultName': self.fields['display_name']._default,
+            'display_description': self.display_description,
+            'thumbnail_url': self.thumbnail_url
+            # pylint: disable=protected-access
         }))
         fragment.add_javascript(RESOURCE_LOADER.load_unicode('public/js/google_docs_edit.js'))
         fragment.add_css(RESOURCE_LOADER.load_unicode('public/css/google_edit.css'))
@@ -112,6 +115,10 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin):  # pylint: disable=too-man
 
         if 'display_name' in submissions:
             self.display_name = submissions['display_name']
+        if 'display_description' in submissions:
+            self.display_description = submissions['display_description']
+        if 'thumbnail_url' in submissions:
+            self.thumbnail_url = submissions['thumbnail_url']
         if 'embed_code' in submissions:
             self.embed_code = submissions['embed_code']
         if 'alt_text' in submissions:

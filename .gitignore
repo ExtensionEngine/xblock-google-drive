@@ -2,3 +2,4 @@ xblock_google_drive.egg-info
 *.log
 *.pyc
 *~
+.idea
