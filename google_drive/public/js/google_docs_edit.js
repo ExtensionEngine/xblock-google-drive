@@ -43,8 +43,9 @@ function GoogleDocumentEditBlock(runtime, element) {
 
     function SaveEditing() {
         var data = new FormData();
-        data.append('display_name', $(element).find('input[name=edit_display_name]').val());
-        data.append('display_description', $(element).find('input[name=edit_display_description]').val());
+
+        data.append('display_name', $(element).find('#edit_display_name').val());
+        data.append('display_description', $(element).find('#edit_display_description').val());
         data.append('usage_id', $(element).data('usage-id'));
         data.append('thumbnail', $(element).find('input[name=thumbnail]')[0].files[0]);
 
