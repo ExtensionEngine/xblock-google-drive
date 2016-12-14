@@ -48,6 +48,7 @@ function GoogleDocumentEditBlock(runtime, element) {
         data.append('display_description', $(element).find('#edit_display_description').val());
         data.append('usage_id', $(element).data('usage-id'));
         data.append('thumbnail', $(element).find('input[name=thumbnail]')[0].files[0]);
+        data.append('embed_code', $(element).find('#edit_embed_code').val());
 
         error_message_div.html();
         error_message_div.css('display', 'none');
