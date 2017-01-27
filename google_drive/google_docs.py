@@ -38,7 +38,10 @@ DEFAULT_EMBED_CODE = textwrap.dedent("""
 """).format(DEFAULT_DOCUMENT_URL)
 DOCUMENT_TEMPLATE = "/templates/html/google_docs.html"
 DOCUMENT_EDIT_TEMPLATE = "/templates/html/google_docs_edit.html"
-
+DOCUMENT_TYPES = {
+    "DATA": "data",
+    "DOC": "document"
+}
 
 # Classes ###########################################################
 class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint: disable=too-many-ancestors
@@ -67,6 +70,12 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint
         scope=Scope.settings,
         default=""
     )
+    document_type = String(
+        display_name="Document Type",
+        scope=Scope.settings,
+        default=""
+    )
+
 
     # Context argument is specified for xblocks, but we are not using herein
     def student_view(self, context):  # pylint: disable=unused-argument

@@ -81,3 +81,14 @@
     background-color: gray;
     cursor: auto;
 }
+
+.google-edit-wrapper input[type=radio] {
+    width:10px !important;
+    height:10px !important;
+}
+
+.google-edit-wrapper .document-type-label {
+    position: relative;
+    top: 2px;
+    margin-right: 6px;
+}
