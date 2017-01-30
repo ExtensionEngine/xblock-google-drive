@@ -38,10 +38,6 @@ DEFAULT_EMBED_CODE = textwrap.dedent("""
 """).format(DEFAULT_DOCUMENT_URL)
 DOCUMENT_TEMPLATE = "/templates/html/google_docs.html"
 DOCUMENT_EDIT_TEMPLATE = "/templates/html/google_docs_edit.html"
-DOCUMENT_TYPES = {
-    "DATA": "data",
-    "DOC": "document"
-}
 
 # Classes ###########################################################
 class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint: disable=too-many-ancestors
