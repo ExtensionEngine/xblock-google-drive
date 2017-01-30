@@ -52,7 +52,7 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint
         display_name="Display Name",
         help="This name appears in the horizontal navigation at the top of the page.",
         scope=Scope.settings,
-        default="Google Document"
+        default="DATA / DOC: GOOGLE"
     )
     embed_code = String(
         display_name="Embed Code",
