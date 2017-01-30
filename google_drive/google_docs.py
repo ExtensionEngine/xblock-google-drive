@@ -72,7 +72,6 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint
         default=""
     )
 
-
     # Context argument is specified for xblocks, but we are not using herein
     def student_view(self, context):  # pylint: disable=unused-argument
         """
