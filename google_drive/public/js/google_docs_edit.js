@@ -47,8 +47,7 @@ function GoogleDocumentEditBlock(runtime, element) {
         data.append('display_description', $(element).find('input[name=edit_display_description]').val());
         data.append('usage_id', $(element).data('usage-id'));
         data.append('thumbnail', $(element).find('input[name=thumbnail]')[0].files[0]);
-        data.append('document_type', $(element).find());
-
+        data.append('document_type', $(element).find('.edit-document-type:checked')[0].value);
         error_message_div.html();
         error_message_div.css('display', 'none');
         var handlerUrl = runtime.handlerUrl(element, 'studio_submit');
