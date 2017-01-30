@@ -39,7 +39,6 @@ DEFAULT_EMBED_CODE = textwrap.dedent("""
 DOCUMENT_TEMPLATE = "/templates/html/google_docs.html"
 DOCUMENT_EDIT_TEMPLATE = "/templates/html/google_docs_edit.html"
 
-
 # Classes ###########################################################
 class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint: disable=too-many-ancestors
     """
@@ -49,7 +48,7 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint
         display_name="Display Name",
         help="This name appears in the horizontal navigation at the top of the page.",
         scope=Scope.settings,
-        default="Google Document"
+        default="DATA / DOC: GOOGLE"
     )
     embed_code = String(
         display_name="Embed Code",
@@ -64,6 +63,11 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint
     alt_text = String(
         display_name="Alternative Text",
         help="Alternative text describes an image and appears if the image is unavailable.",
+        scope=Scope.settings,
+        default=""
+    )
+    document_type = String(
+        display_name="Document Type",
         scope=Scope.settings,
         default=""
     )
@@ -94,7 +98,8 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint
             'self': self,
             'defaultName': self.fields['display_name']._default,
             'display_description': self.display_description,
-            'thumbnail_url': self.thumbnail_url
+            'thumbnail_url': self.thumbnail_url,
+            'document_type_doc': self.document_type == "doc"
             # pylint: disable=protected-access
         }))
         fragment.add_javascript(RESOURCE_LOADER.load_unicode('public/js/google_docs_edit.js'))
@@ -122,6 +127,8 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint
             self.embed_code = data['embed_code']
         if 'alt_text' in data:
             self.alt_text = data['alt_text']
+        if 'document_type' in data:
+            self.document_type = data['document_type']
 
         return Response(json_body={
             'result': "success"

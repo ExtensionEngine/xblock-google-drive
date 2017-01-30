@@ -58,6 +58,21 @@
                     </div >
                     <span class="tip setting-help" >{% trans "Alternative text describes an image and appears if the image is unavailable." %}</span >
                 </li >
+                <li class="field comp-setting-entry is-set" id="alt_text_item" >
+                    <div class="wrapper-comp-setting" >
+                        <label class="label setting-label" for="edit_document_type" >{% trans "The media should be labeled as..." %}</label >
+                        <input name="document_type" class="input setting-input edit-document-type radio" value="data"
+                               type="radio" {% if not document_type_doc %}
+                                            checked
+                                            {% endif %}>
+                        <label class="document-type-label" for="data">Data</label>
+                        <input name="document_type" class="input setting-input edit-document-type radio" value="doc"
+                               type="radio" {% if document_type_doc %}
+                                            checked
+                                            {% endif %}>
+                        <label class="document-type-label" for="doc">Document</label>
+                    </div >
+                </li >
             </ul >
         </div >
     </div >
