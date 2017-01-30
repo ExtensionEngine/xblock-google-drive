@@ -14,7 +14,7 @@
             <ul class="list-input settings-list" >
                 <li class="field comp-setting-entry is-set" >
                     <div class="wrapper-comp-setting" >
-                        <label class="label setting-label" for="edit_display_name" >{% trans "Display Name" %}</label >
+                        <label class="label setting-label" for="edit_display_name" >{% trans "Media Title" %}</label >
                         <input class="input setting-input edit-display-name" id="edit_display_name"
                                value="{{ self.display_name }}" type="text" data-default-value="{{defaultName}}" >
                         <button class="action setting-clear clear-display-name" type="button" name="setting-clear" >
@@ -62,10 +62,10 @@
                     <div class="wrapper-comp-setting" >
                         <label class="label setting-label" for="edit_document_type" >{% trans "Document type" %}</label >
                         <input name="document_type" class="input setting-input edit-document-type radio" value="data"
-                               type="radio" >
+                               type="radio" checked="{{ document_type_doc }}">
                         <label class="document-type-label" for="data">Data</label>
                         <input name="document_type" class="input setting-input edit-document-type radio" value="doc"
-                               type="radio" >
+                               type="radio" checked="{{ document_type_doc }}">
                         <label class="document-type-label" for="doc">Doc</label>
                     </div >
                     <span class="tip setting-help" >{% trans "Tip!!!!!!!!!!." %}</span >

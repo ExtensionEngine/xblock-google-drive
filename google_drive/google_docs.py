@@ -103,7 +103,8 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint
             'self': self,
             'defaultName': self.fields['display_name']._default,
             'display_description': self.display_description,
-            'thumbnail_url': self.thumbnail_url
+            'thumbnail_url': self.thumbnail_url,
+            'document_type_doc': self.document_type == "doc"
             # pylint: disable=protected-access
         }))
         fragment.add_javascript(RESOURCE_LOADER.load_unicode('public/js/google_docs_edit.js'))
@@ -131,6 +132,8 @@ class GoogleDocumentBlock(XBlock, PublishEventMixin, FileUploadMixin):  # pylint
             self.embed_code = data['embed_code']
         if 'alt_text' in data:
             self.alt_text = data['alt_text']
+        if 'document_type' in data:
+            self.document_type = data['document_type']
 
         return Response(json_body={
             'result': "success"
